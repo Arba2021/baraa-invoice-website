@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baraa Invoice System | Enterprise V9.5</title>
+    <meta name="description" content="Next-Generation Offline AI Invoice Automation. Zero Cloud. 99% Accuracy.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts: Plus Jakarta Sans for premium feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: '#020408',      
+                        card: '#0B101B',      
+                        primary: '#6366f1',   
+                        secondary: '#8b5cf6', 
+                        accent: '#38bdf8',    
+                    },
+                    backgroundImage: {
+                        'premium-gradient': 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                        'subtle-glow': 'radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CRITICAL FIX FOR GITHUB PAGES:
+           Background must be transparent so the fixed .aurora-bg (z-index: -1) is visible.
+        */
+        body { 
+            background-color: transparent; 
+            color: #F1F5F9;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Aurora Background Layer */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: #020408; /* The actual dark background color lives here now */
+            overflow: hidden;
+        }
+        .aurora-blob {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            animation: blob 20s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #4f46e5; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #0f172a; }
+        .blob-3 { bottom: 20%; left: 20%; width: 40vw; height: 40vw; background: #1e1b4b; opacity: 0.3; }
+
+        /* Premium Glass Card */
+        .glass-card {
+            background: rgba(11, 16, 27, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(11, 16, 27, 0.8);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: white; color: black;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2);
+            background: #f8fafc;
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        /* Text Gradients */
+        .text-gradient-hero {
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* Screenshot Gallery */
+        .gallery-item {
+            border-radius: 12px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            background: #000;
+            position: relative;
+        }
+        .gallery-img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.6s ease; opacity: 0.8;
+        }
+        .gallery-item:hover .gallery-img { transform: scale(1.05); opacity: 1; }
+        
+        /* Code Block */
+        .code-window {
+            background: #0d1117;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-blob blob-1"></div>
+        <div class="aurora-blob blob-2"></div>
+        <div class="aurora-blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-[#020408]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
+                    <i class="fa-solid fa-layer-group text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-display font-bold text-lg tracking-tight text-white">Baraa<span class="text-gray-400">System</span></span>
+                </div>
+            </div>
+            
+            <!-- Menu -->
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="#engine" class="hover:text-white transition">Dual-Core AI</a>
+                <a href="#validation" class="hover:text-white transition">Auto-Repair</a>
+                <a href="#workflow" class="hover:text-white transition">Workflows</a>
+                <a href="#outputs" class="hover:text-white transition">Outputs</a>
+            </div>
+
+            <!-- CTA -->
+            <a href="#contact" class="px-5 py-2.5 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-100 transition shadow-lg shadow-white/5">
+                Get License
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-40 pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 text-center relative z-10">
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-10 animate-fade-in">
+                <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span class="text-sm font-medium text-gray-300">Enterprise V9.5 • Offline Ready</span>
+            </div>
+            
+            <!-- Headline -->
+            <h1 class="font-display text-4xl md:text-7xl font-bold leading-[1.1] mb-8 tracking-tight animate-fade-in" style="animation-delay: 0.1s">
+                Next-Generation Offline <br>
+                <span class="text-gradient-hero">AI Invoice Automation</span>
+            </h1>
+            
+            <!-- Subhead -->
+            <p class="text-gray-400 text-lg max-w-3xl mx-auto mb-12 leading-relaxed animate-fade-in" style="animation-delay: 0.2s">
+                A high-performance, desktop-based platform that converts unstructured PDFs and images into structured financial data. 
+                <span class="text-gray-200 block mt-2">Zero cloud dependency. 100% Privacy. 99% Accuracy.</span>
+            </p>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 animate-fade-in" style="animation-delay: 0.3s">
+                <a href="#demo" class="btn-primary px-8 py-4 rounded-xl flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-play text-sm"></i> Watch Workflow
+                </a>
+                <a href="#contact" class="btn-outline px-8 py-4 rounded-xl flex items-center justify-center gap-3">
+                    Contact Sales
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Demo Section -->
+    <section id="demo" class="py-20">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="glass-card p-2 rounded-2xl">
+                <!-- 
+                    Video Player
+                -->
+                <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-2xl group cursor-pointer" 
+                     onclick="this.innerHTML='<iframe class=\'w-full h-full\' src=\'https://www.youtube-nocookie.com/embed/zmVXWxnv2NA?autoplay=1&rel=0&modestbranding=1&playsinline=1\' title=\'Baraa Demo\' frameborder=\'0\' allow=\'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\' allowfullscreen></iframe>'">
+                    
+                    <!-- The Thumbnail Image -->
+                    <img src="https://img.youtube.com/vi/zmVXWxnv2NA/maxresdefault.jpg" 
+                         alt="Baraa System Demo" 
+                         class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition duration-500 transform group-hover:scale-105">
+                    
+                    <!-- The Play Button Overlay -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-24 h-24 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border border-white/20 shadow-lg group-hover:bg-primary/90 transition duration-300 group-hover:scale-110">
+                            <i class="fa-solid fa-play text-white text-3xl ml-2"></i>
+                        </div>
+                    </div>
+
+                    <!-- Optional: text hint -->
+                    <div class="absolute bottom-6 left-0 w-full text-center">
+                        <p class="text-white font-display font-bold tracking-widest text-sm drop-shadow-md">CLICK TO WATCH DEMO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Engine Specs -->
+    <section id="engine" class="py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-16 md:text-center">
+                <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">The Dual-Core AI Engine</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Our "Eyes and Brain" architecture achieves 99% accuracy on messy, scanned documents.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Vision Card -->
+                <div class="glass-card p-10 rounded-3xl">
+                    <div class="w-14 h-14 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 mb-6 border border-indigo-500/20">
+                        <i class="fa-solid fa-eye text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-2">1. The Vision Layer</h3>
+                    <p class="text-xs font-mono text-indigo-400 mb-6 tracking-wider">ADVANCED PADDLEOCR ENGINE</p>
+                    <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Smart PDF Conversion:</strong> Auto-converts multi-page PDFs to 300 DPI high-res images.</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Skew Correction:</strong> Handles rotated scans and low-contrast mobile photos.</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Layout Mapping:</strong> Identifies text coordinates and table structures.</li>
+                    </ul>
+                </div>
+
+                <!-- Brain Card -->
+                <div class="glass-card p-10 rounded-3xl">
+                    <div class="w-14 h-14 bg-violet-500/10 rounded-xl flex items-center justify-center text-violet-400 mb-6 border border-violet-500/20">
+                        <i class="fa-solid fa-brain text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-display font-bold text-white mb-2">2. The Logic Layer</h3>
+                    <p class="text-xs font-mono text-violet-400 mb-6 tracking-wider">FINE-TUNED QWEN-2.5-1.5B (LOCAL)</p>
+                    <ul class="space-y-4 text-gray-400 text-sm leading-relaxed">
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Context Aware:</strong> Distinguishes "Ship To" from "Bill To" addresses.</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Complex Parsing:</strong> Extracts line items, unit prices, and hidden metadata like PO numbers.</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-white mt-1"></i> <strong>Local Inference:</strong> Runs via llama_cpp, understanding content without internet.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Smart Validation Section -->
+    <section id="validation" class="py-24 bg-white/[0.02] border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded text-xs font-bold mb-4">ENTERPRISE GRADE</div>
+                <h2 class="font-display text-3xl font-bold mb-4">Smart Validation & Auto-Repair</h2>
+                <p class="text-gray-400">It doesn't just extract data; it audits it.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Validation 1 -->
+                <div class="p-8 rounded-2xl bg-[#0B101B] border border-white/5 hover:border-white/10 transition">
+                    <div class="text-emerald-500 mb-4 text-3xl"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <h4 class="font-bold text-white text-lg mb-2">Math Auto-Correction</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        If the AI misreads a "3" as an "8", our Validation Engine recalculates (Qty × Price) and overwrites the error with the mathematically correct value.
+                    </p>
+                </div>
+                <!-- Validation 2 -->
+                <div class="p-8 rounded-2xl bg-[#0B101B] border border-white/5 hover:border-white/10 transition">
+                    <div class="text-amber-500 mb-4 text-3xl"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h4 class="font-bold text-white text-lg mb-2">Logical Auditing</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Checks if Subtotal + Tax equals Grand Total. If the math doesn't add up, the invoice is flagged "Yellow" for human review.
+                    </p>
+                </div>
+                <!-- Validation 3 -->
+                <div class="p-8 rounded-2xl bg-[#0B101B] border border-white/5 hover:border-white/10 transition">
+                    <div class="text-red-500 mb-4 text-3xl"><i class="fa-solid fa-ban"></i></div>
+                    <h4 class="font-bold text-white text-lg mb-2">Duplicate Detection</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed">
+                        Automatically checks the internal database against new scans to prevent processing the same invoice number twice.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Processing Modules -->
+    <section id="workflow" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-3xl font-bold mb-16 text-center">Processing Modules</h2>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Live Workbench -->
+                <div class="glass-card p-10 rounded-3xl border-l-4 border-blue-500">
+                    <h3 class="text-2xl font-bold text-white mb-2">1. Live Workbench</h3>
+                    <p class="text-sm text-blue-400 font-mono mb-6">SINGLE FILE MODE • HUMAN-IN-THE-LOOP</p>
+                    <ul class="space-y-4 text-gray-400">
+                        <li class="flex gap-4"><i class="fa-solid fa-split text-white mt-1"></i> <span><strong>Split-Screen Interface:</strong> View original document next to extracted data.</span></li>
+                        <li class="flex gap-4"><i class="fa-solid fa-magnifying-glass-plus text-white mt-1"></i> <span><strong>Smart Zoom:</strong> Deep zoom to read fine print on invoices.</span></li>
+                        <li class="flex gap-4"><i class="fa-solid fa-pen-to-square text-white mt-1"></i> <span><strong>JSON Editor:</strong> Manually correct any field before saving.</span></li>
+                    </ul>
+                </div>
+
+                <!-- Batch Queue -->
+                <div class="glass-card p-10 rounded-3xl border-l-4 border-purple-500">
+                    <h3 class="text-2xl font-bold text-white mb-2">2. Batch Queue</h3>
+                    <p class="text-sm text-purple-400 font-mono mb-6">BULK AUTOMATION MODE</p>
+                    <ul class="space-y-4 text-gray-400">
+                        <li class="flex gap-4"><i class="fa-solid fa-folder-open text-white mt-1"></i> <span><strong>Folder Scanning:</strong> Point to a folder to ingest hundreds of files.</span></li>
+                        <li class="flex gap-4"><i class="fa-solid fa-microchip text-white mt-1"></i> <span><strong>Background Processing:</strong> Runs silently while you work.</span></li>
+                        <li class="flex gap-4"><i class="fa-solid fa-traffic-light text-white mt-1"></i> <span><strong>Color-Coded Status:</strong> <span class="text-green-400">Green (Verified)</span>, <span class="text-yellow-400">Yellow (Warning)</span>, <span class="text-red-400">Red (Error)</span>.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Extraction List -->
+    <section id="extraction" class="py-24 bg-white/[0.02]">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-3xl font-bold mb-12 text-center">25+ Data Points Extracted</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
+                <div class="p-6 rounded-2xl bg-[#0B101B] border border-white/5">
+                    <h4 class="font-bold text-white mb-4 border-b border-white/10 pb-2">Header Info</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Invoice Number</li>
+                        <li>Invoice Date</li>
+                        <li>Due Date</li>
+                        <li>PO Number</li>
+                        <li>Currency</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0B101B] border border-white/5">
+                    <h4 class="font-bold text-white mb-4 border-b border-white/10 pb-2">Parties</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Seller Name & Address</li>
+                        <li>Seller GSTIN / Tax ID</li>
+                        <li>Buyer Name & Address</li>
+                        <li>Buyer GSTIN / Tax ID</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0B101B] border border-white/5">
+                    <h4 class="font-bold text-white mb-4 border-b border-white/10 pb-2">Financials</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Subtotal</li>
+                        <li>Discount Amount</li>
+                        <li>Tax Amount</li>
+                        <li>Grand Total</li>
+                        <li>Bank Details</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0B101B] border border-white/5">
+                    <h4 class="font-bold text-white mb-4 border-b border-white/10 pb-2">Metadata</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Line Item Details (Qty/Price)</li>
+                        <li>AI Confidence Score</li>
+                        <li>Processing Timestamp</li>
+                        <li>Model Version</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Automated Outputs -->
+    <section id="outputs" class="py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                
+                <div>
+                    <h2 class="font-display text-3xl font-bold mb-6">Automated Archiving & Export</h2>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        When you click "Approve & Archive", the system organizes your chaotic files into a structured digital filing cabinet.
+                    </p>
+
+                    <div class="glass-card p-6 rounded-xl border-l-2 border-indigo-500 mb-8">
+                        <h4 class="font-bold text-white text-sm mb-2"><i class="fa-solid fa-folder-tree mr-2"></i>Smart File Organization</h4>
+                        <p class="text-sm text-gray-400">
+                            Files are automatically renamed (e.g., <code>Vendor_Inv#001.pdf</code>) and moved into folders sorted by <strong>Year / Month</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Customization Note -->
+                    <div class="p-4 mb-8 bg-primary/10 border border-primary/20 rounded-lg">
+                        <p class="text-sm text-indigo-200 leading-relaxed">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2 text-primary"></i>
+                            <strong>Custom Integration:</strong> The data structure is fully customizable — I can tailor the output format, fields, and schema to match any client’s workflow or system requirements.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 text-sm font-medium text-gray-300">
+                            <i class="fa-solid fa-file-excel text-green-500 w-6 text-xl"></i> 
+                            <span><strong>Excel (.xlsx):</strong> Human-readable reports with summary & line item sheets.</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm font-medium text-gray-300">
+                            <i class="fa-solid fa-database text-yellow-500 w-6 text-xl"></i> 
+                            <span><strong>SQLite DB:</strong> Searchable internal history of all invoices.</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm font-medium text-gray-300">
+                            <i class="fa-solid fa-code text-blue-500 w-6 text-xl"></i> 
+                            <span><strong>JSON & CSV:</strong> Ready for ERP import (SAP, QuickBooks, Tally).</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Window -->
+                <div class="code-window p-1">
+                    <div class="bg-[#0d1117] rounded-lg overflow-hidden p-6">
+                        <div class="flex items-center justify-between mb-4 border-b border-white/10 pb-4">
+                            <span class="text-xs font-mono text-gray-500">export_data.json</span>
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500/20"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/20"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500/20"></div>
+                            </div>
+                        </div>
+<pre class="font-mono text-xs md:text-sm leading-relaxed overflow-x-auto">
+<span class="text-gray-500">{</span>
+  <span class="text-blue-400">"Invoice_Number"</span>: <span class="text-green-400">"INV-2024-8902"</span>,
+  <span class="text-blue-400">"Invoice_Info"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Invoice_Date"</span>: <span class="text-green-400">"2024-10-15"</span>,
+    <span class="text-blue-400">"Due_Date"</span>: <span class="text-green-400">"2024-11-15"</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"Seller"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Name"</span>: <span class="text-green-400">"Apex Tech Solutions Ltd"</span>,
+    <span class="text-blue-400">"Address"</span>: <span class="text-green-400">"45 Silicon Valley Blvd, San Jose, CA"</span>,
+    <span class="text-blue-400">"Email"</span>: <span class="text-green-400">"billing@apextech.com"</span>,
+    <span class="text-blue-400">"GSTIN"</span>: <span class="text-green-400">"99AAACA6321G1Z5"</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"Buyer"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Name"</span>: <span class="text-green-400">"Global Logistics Corp"</span>,
+    <span class="text-blue-400">"Address"</span>: <span class="text-green-400">"88 Industrial Way, Austin, TX"</span>,
+    <span class="text-blue-400">"Tel"</span>: <span class="text-green-400">"+1-512-555-0123"</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"Line_Items"</span>: <span class="text-gray-500">[</span>
+    <span class="text-gray-500">{</span>
+      <span class="text-blue-400">"Description"</span>: <span class="text-green-400">"Dell Latitude 7440 Laptop"</span>,
+      <span class="text-blue-400">"Quantity"</span>: <span class="text-orange-400">5.0</span>,
+      <span class="text-blue-400">"Unit_Price"</span>: <span class="text-orange-400">1250.00</span>,
+      <span class="text-blue-400">"Total_Price"</span>: <span class="text-orange-400">6250.00</span>
+    <span class="text-gray-500">}</span>
+  <span class="text-gray-500">]</span>,
+  <span class="text-blue-400">"Financials"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Subtotal"</span>: <span class="text-orange-400">7750.00</span>,
+    <span class="text-blue-400">"Tax_Amount"</span>: <span class="text-orange-400">675.00</span>,
+    <span class="text-blue-400">"Grand_Total"</span>: <span class="text-orange-400">8175.00</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"Bank_Details"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Bank_Name"</span>: <span class="text-green-400">"JPMorgan Chase"</span>,
+    <span class="text-blue-400">"Account_Number"</span>: <span class="text-green-400">"9876543210"</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"AI_Metadata"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Model_Name"</span>: <span class="text-green-400">"Qwen-2.5-1.5B-Int4"</span>,
+    <span class="text-blue-400">"Confidence"</span>: <span class="text-orange-400">0.99</span>
+  <span class="text-gray-500">}</span>,
+  <span class="text-blue-400">"File_Paths"</span>: <span class="text-gray-500">{</span>
+    <span class="text-blue-400">"Original"</span>: <span class="text-green-400">"OUTPUTS\\01_Invoice_Archive\\Apex_Tech_8902.pdf"</span>,
+    <span class="text-blue-400">"JSON"</span>: <span class="text-green-400">"OUTPUTS\\01_Invoice_Archive\\Apex_Tech_8902.json"</span>
+  <span class="text-gray-500">}</span>
+<span class="text-gray-500">}</span>
+</pre>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Security & Licensing -->
+    <section class="py-24 bg-white/[0.02] border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="font-display text-3xl font-bold mb-16 text-center">Security & Licensing</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="p-6">
+                    <i class="fa-solid fa-lock text-3xl text-gray-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Zero Data Leakage</h4>
+                    <p class="text-sm text-gray-400">AI models live inside your installation folder. No data is ever sent to the cloud.</p>
+                </div>
+                <div class="p-6">
+                    <i class="fa-solid fa-key text-3xl text-gray-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Secure Licensing</h4>
+                    <p class="text-sm text-gray-400">Enterprise features unlocked via signed .lic files. Encrypted usage counters for trial enforcement.</p>
+                </div>
+                <div class="p-6">
+                    <i class="fa-brands fa-windows text-3xl text-gray-400 mb-4"></i>
+                    <h4 class="font-bold text-white mb-2">Non-Intrusive Install</h4>
+                    <p class="text-sm text-gray-400">Installs to User Desktop for easy access to Input/Output folders without admin permission issues.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Specs -->
+    <section class="py-16">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h4 class="text-gray-500 text-sm font-bold uppercase tracking-widest mb-6">Technical Requirements</h4>
+            <div class="flex flex-wrap justify-center gap-4 md:gap-12 text-sm text-gray-300 font-mono">
+                <span><i class="fa-brands fa-windows mr-2"></i>Windows 10/11 (64-bit)</span>
+                <span><i class="fa-solid fa-memory mr-2"></i>8GB RAM Min (16GB Rec)</span>
+                <span><i class="fa-solid fa-hard-drive mr-2"></i>2.5GB Disk Space</span>
+                <span><i class="fa-solid fa-box-open mr-2"></i>Portable .EXE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-32 border-t border-white/5 bg-white/[0.01]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="font-display text-3xl font-bold mb-4">Interface Gallery</h2>
+                <p class="text-gray-400">A look inside the modern dashboard.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="gallery-item aspect-[16/10]"><img src="screen1.png" alt="Dashboard" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen2.png" alt="Upload" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen3.png" alt="Queue" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen4.png" alt="Editor" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen5.png" alt="Extraction" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen6.png" alt="Export" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen7.png" alt="Settings" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen8.png" alt="Database" class="gallery-img"></div>
+                <div class="gallery-item aspect-[16/10]"><img src="screen9.png" alt="Archive" class="gallery-img"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section id="contact" class="py-32 text-center relative overflow-hidden">
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[100px] -z-10"></div>
+
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="font-display text-5xl font-bold mb-8">Ready to Automate?</h2>
+            <p class="text-xl text-gray-300 mb-12 font-light">
+                Secure your license for Baraa Invoice System Enterprise.
+            </p>
+            
+            <a href="mailto:arun0xyz@gmail.com" class="inline-flex items-center gap-3 px-10 py-5 bg-white text-black font-bold rounded-xl hover:bg-gray-100 transition shadow-2xl shadow-white/10">
+                <i class="fa-regular fa-envelope"></i> Contact Sales
+            </a>
+
+            <div class="mt-12 flex justify-center gap-8 text-xs font-mono text-gray-500 uppercase tracking-widest">
+                <span>V9.5 Stable</span>
+                <span>Python Native</span>
+                <span>Nuitka Compiled</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 border-t border-white/5 bg-[#020408] text-center">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <span class="font-display font-bold text-white">Baraa<span class="text-gray-500">System</span></span>
+            <p class="text-gray-600 text-sm">© 2025 Baraa Invoice System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        });
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>
